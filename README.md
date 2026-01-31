@@ -132,7 +132,7 @@ dotnet test /p:CollectCoverage=true
 
 ## Technology Stack
 
-- **Framework**: .NET 8
+- **Framework**: .NET 10
 - **Database**: PostgreSQL 17
 - **ORM**: Entity Framework Core 8
 - **Caching**: Redis
