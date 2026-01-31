@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CouponSystem.API/CouponSystem.API.csproj" />
+    <Project Path="src/CouponSystem.Application/CouponSystem.Application.csproj" />
+    <Project Path="src/CouponSystem.Domain/CouponSystem.Domain.csproj" />
+    <Project Path="src/CouponSystem.Infrastructure/CouponSystem.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CouponSystem.Tests/CouponSystem.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: coupon_postgres
+    environment:
+      POSTGRES_DB: coupon_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - coupon_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: coupon_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - coupon_network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: coupon_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - coupon_network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coupon_api
+    ports:
+      - "5000:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=postgres;Database=coupon_db;Username=postgres;Password=postgres"
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+    networks:
+      - coupon_network
+
+volumes:
+  postgres_data:
+
+networks:
+  coupon_network:
+    driver: bridge
