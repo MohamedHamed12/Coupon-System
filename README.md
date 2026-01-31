@@ -1,6 +1,6 @@
 # Coupon System - Enterprise E-commerce Solution
 
-A production-ready coupon management system built with .NET 8, Domain-Driven Design (DDD), and Clean Architecture principles.
+A production-ready coupon management system built with .NET 10, Domain-Driven Design (DDD), and Clean Architecture principles.
 
 ## Features
 
