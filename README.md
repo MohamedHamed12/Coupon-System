@@ -32,7 +32,7 @@ CouponSystem/
 
 ### Prerequisites
 
-- .NET 8 SDK
+- .NET 10 SDK
 - Docker & Docker Compose
 - PostgreSQL 17 (or use Docker)
 
