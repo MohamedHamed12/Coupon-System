@@ -10,7 +10,7 @@ public static class CouponEndpoints
     {
         var group = app.MapGroup("/api/v1/coupons")
             .WithTags("Coupons")
-            .WithOpenApi();
+            .RequireAuthorization();
         
         group.MapPost("/", CreateCoupon)
             .WithName("CreateCoupon")

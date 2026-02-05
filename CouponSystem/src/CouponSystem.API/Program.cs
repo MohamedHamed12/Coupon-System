@@ -5,6 +5,10 @@ using CouponSystem.Application.Commands;
 using CouponSystem.Application.Mappings;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using CouponSystem.API.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +35,32 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateCouponCommand>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Authentication & Authorization
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "ReplaceThisWithASecureLongSecretKey";
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "CouponSystem";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "CouponSystemUsers";
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 // CORS
 builder.Services.AddCors(options =>
 {
@@ -54,7 +84,11 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Map endpoints
+app.MapAuthEndpoints();
 app.MapCouponEndpoints();
 
 app.Run();
