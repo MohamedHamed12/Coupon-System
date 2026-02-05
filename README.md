@@ -70,6 +70,41 @@ cd ../CouponSystem.API
 dotnet run
 ```
 
+### JWT Authentication Setup (Development)
+
+This project uses JWT Bearer tokens for API authentication. For security, the signing secret is not stored in source control — set it with user-secrets or an environment variable.
+
+- Using user-secrets (recommended for local development):
+
+```bash
+cd src/CouponSystem.API
+dotnet user-secrets init
+dotnet user-secrets set "Jwt:Key" "<your-very-long-random-secret>"
+```
+
+- Using environment variable:
+
+```bash
+export Jwt__Key="<your-very-long-random-secret>"
+# On Windows PowerShell:
+# $env:Jwt__Key = '<your-very-long-random-secret>'
+```
+
+The `Jwt:Issuer`, `Jwt:Audience`, and `Jwt:ExpiresMinutes` defaults are in the appsettings files — override them with environment variables or user-secrets if needed.
+
+### Creating a Development User (Quick Seed)
+
+The API uses a simple `users` table for authentication. Passwords are currently verified using SHA256(username+":"+password) hex digest. For development you can seed a user with the following steps:
+
+1. Run a quick C# snippet (example) to add a user to the database using the same hashing method, or insert directly into the `users` table. Example (run from project root):
+
+```bash
+dotnet run --project src/CouponSystem.API -- "seed-user" "test" "password"
+```
+
+If you'd like, I can add a small dev-seed endpoint or a CLI seed command to automate this. For production, replace the SHA256 scheme with a secure password hasher (ASP.NET Identity or BCrypt) and use a proper user management flow.
+
+
 ## API Endpoints
 
 ### Create Coupon
