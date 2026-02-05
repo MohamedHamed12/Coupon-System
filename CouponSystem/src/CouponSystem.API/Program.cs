@@ -61,6 +61,9 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+// User repository
+builder.Services.AddScoped<CouponSystem.Domain.Repositories.IUserRepository, CouponSystem.Infrastructure.Persistence.Repositories.UserRepository>();
+
 // CORS
 builder.Services.AddCors(options =>
 {
